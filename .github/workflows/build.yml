@@ -1,8 +1,8 @@
-name: Build APK
+name: Build Flutter APK
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -21,22 +21,19 @@ jobs:
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.19.x'
+        flutter-version: '3.19.0'
+        channel: 'stable'
 
-    - name: Create Basic App Structure
+    - name: Create Project and Build
       run: |
-        flutter create --org com.bible.app temp_app
-        cp -r temp_app/* .
-        rm -rf temp_app
+        flutter create --org com.example temp_app
+        rm -rf temp_app/lib/main.dart
+        cp lib/main.dart temp_app/lib/main.dart
+        cd temp_app
+        flutter build apk --split-per-abi
 
-    - name: Get Dependencies
-      run: flutter pub get
-
-    - name: Build APK
-      run: flutter build apk --split-per-abi
-
-    - name: Upload APK Artifact
+    - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: bible-app-apk
-        path: build/app/outputs/flutter-apk/*.apk
+        path: temp_app/build/app/outputs/flutter-apk/*.apk
