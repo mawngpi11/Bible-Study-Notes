@@ -14,6 +14,7 @@ class BibleLessonApp extends StatefulWidget {
 
 class _BibleLessonAppState extends State<BibleLessonApp> {
   bool isDarkMode = false;
+  
 
   @override
   Widget build(BuildContext context) {
